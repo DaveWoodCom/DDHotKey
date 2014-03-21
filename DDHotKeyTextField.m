@@ -54,6 +54,11 @@ static DDHotKeyTextFieldEditor *DDFieldEditor(void) {
     if (_hotKey != hotKey) {
         _hotKey = hotKey;
         [super setStringValue:[DDStringFromKeyCode(hotKey.keyCode, hotKey.modifierFlags) uppercaseString]];
+
+        if ([self.delegate respondsToSelector:@selector(controlTextDidChange:)]) {
+            NSNotification* notification = [NSNotification notificationWithName:@"controlTextDidChange:" object:self];
+            [self.delegate performSelector:@selector(controlTextDidChange:) withObject:notification];
+        }
     }
 }
 
