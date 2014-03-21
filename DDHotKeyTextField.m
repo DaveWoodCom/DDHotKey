@@ -93,7 +93,6 @@ static DDHotKeyTextFieldEditor *DDFieldEditor(void) {
         _hasSeenKeyDown = YES;
         unichar character = [event.charactersIgnoringModifiers characterAtIndex:0];
         
-
         if (hasModifier == NO && ([[NSCharacterSet newlineCharacterSet] characterIsMember:character] || event.keyCode == kVK_Escape)) {
             if (event.keyCode == kVK_Escape) {
                 self.hotKeyField.hotKey = _originalHotKey;
@@ -103,6 +102,16 @@ static DDHotKeyTextFieldEditor *DDFieldEditor(void) {
             }
             [self.window makeFirstResponder:nil];
             return;
+        }
+        else if (hasModifier == NO && event.keyCode == kVK_Tab) {
+            if (self.hotKeyField.nextValidKeyView) {
+                [self.window makeFirstResponder:self.hotKeyField.nextValidKeyView];
+            }
+        }
+        else if ((flags & NSShiftKeyMask) && event.keyCode == kVK_Tab) {
+            if (self.hotKeyField.previousValidKeyView) {
+                [self.window makeFirstResponder:self.hotKeyField.previousValidKeyView];
+            }
         }
     }
     
